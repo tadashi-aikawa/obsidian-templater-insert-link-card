@@ -12,21 +12,21 @@ You need to install [Obsidian] and [Templater].
 
 ## Get started
 
-1⃣ Create a **Scripts directory** for using [Script User Functions] on [Templater]. For example, `_Privates/Templater/Scripts`
+① Create a **Scripts directory** for using [Script User Functions] on [Templater]. For example, `_Privates/Templater/Scripts`
 
 ![](1.png)
 
-2⃣ Copy or link `main.js` under the **Scripts directory**
+② Copy or link `main.js` under the **Scripts directory**
 
 ![](2.png)
 
-3⃣ Set **Scripts directory** to `Templater > Script files folder location`
+③ Set **Scripts directory** to `Templater > Script files folder location`
 
 ![](3.png)
 
-4⃣ Copy definitions of `main.css` to your CSS files (`CSS snippets` / `publish.css`)
+④ Copy definitions of `main.css` to your CSS files (`CSS snippets` / `publish.css`)
 
-5⃣ Create a template as follows
+⑤ Create a template as follows
 
 `Insert Link Card.md`
 
