@@ -16,7 +16,7 @@ You need to install [Obsidian] and [Templater].
 
 ![](1.png)
 
-② Copy or link `main.js` under the **Scripts directory**
+② Copy or link `main.js` to the **Scripts directory**
 
 ![](2.png)
 
