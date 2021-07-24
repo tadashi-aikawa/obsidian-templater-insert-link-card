@@ -8,7 +8,7 @@ This repository is snippets that enable inserting a link as a card using [Templa
 
 ## Requirements
 
-You need to install [Obsidian] and [Templater].
+You need to install [Obsidian] (>= v0.12.11) and [Templater].
 
 ## Get started
 
