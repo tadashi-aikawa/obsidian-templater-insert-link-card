@@ -34,9 +34,9 @@ You need to install [Obsidian] (>= v0.12.11) and [Templater].
 <%*
 const DESC_MAX_LEN = 100
 
-const url = await tp.system.prompt("Enter URL", DESC_MAX_LEN)
+const url = await tp.system.prompt("Enter URL")
 if (url) {
-  tR = await tp.user.create_card(url)
+  tR = await tp.user.create_card(url, DESC_MAX_LEN)
 }
 %>
 ```
