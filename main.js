@@ -2,6 +2,13 @@ function trimMax(str, num) {
   return str.length > num ? `${str.substring(0, num)}...` : str;
 }
 
+function trimEmptyLine(str) {
+  return str
+    .split("\n")
+    .filter((x) => x)
+    .join("");
+}
+
 async function fetchAsDom(url) {
   const res = await request({ url });
   return new DOMParser().parseFromString(res, "text/html");
@@ -21,7 +28,7 @@ function getSrcById(dom, id) {
 }
 
 function getFaviconUrl(dom, url) {
-  const iconHref =
+  let iconHref =
     dom.querySelector("link[rel='icon']")?.attributes?.href?.value ??
     dom.querySelector("link[rel='shortcut icon']")?.attributes?.href?.value;
   if (!iconHref) {
@@ -34,6 +41,7 @@ function getFaviconUrl(dom, url) {
   if (iconHref.startsWith("//")) {
     return new URL(url).protocol + iconHref;
   }
+  iconHref = iconHref.replace(/\.+\//, "/");
 
   const baseUrl = dom.querySelector("base")?.attributes?.href?.value;
   if (baseUrl) {
@@ -41,6 +49,13 @@ function getFaviconUrl(dom, url) {
   }
 
   return new URL(url).origin + iconHref;
+}
+
+function getImageUrl(dom, url) {
+  const imageUrl =
+    getMetaByProperty(dom, "og:image") ?? getSrcById(dom, "ebooksImgBlkFront");
+
+  return imageUrl;
 }
 
 function isSecure(url) {
@@ -62,9 +77,7 @@ async function createCard(url, descMaxLen) {
     getMetaByName(html, "description") ??
     "";
   const faviconUrl = getFaviconUrl(html, url);
-  const imageUrl =
-    getMetaByProperty(html, "og:image") ??
-    getSrcById(html, "ebooksImgBlkFront");
+  const imageUrl = getImageUrl(html, url);
 
   const imageDom = isSecure(imageUrl)
     ? `<img src="${imageUrl}" class="link-card-image"/>`
@@ -81,7 +94,7 @@ async function createCard(url, descMaxLen) {
 				<p class="link-card-title">${title}</p>
 			</div>
 			<div class="link-card-description">
-				${trimMax(description, descMaxLen)}
+				${trimEmptyLine(trimMax(description, descMaxLen))}
 			</div>
 		</div>
 		${imageDom}
