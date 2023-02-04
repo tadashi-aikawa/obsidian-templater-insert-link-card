@@ -44,6 +44,9 @@ function getFaviconUrl(dom, url) {
   iconHref = iconHref.replace(/\.+\//, "/");
 
   const baseUrl = dom.querySelector("base")?.attributes?.href?.value;
+  if (baseUrl === "/") {
+    return new URL(url).origin + "/" + iconHref;
+  }
   if (baseUrl) {
     return baseUrl + iconHref;
   }
