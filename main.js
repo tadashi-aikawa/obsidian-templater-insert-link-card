@@ -27,38 +27,45 @@ function getSrcById(dom, id) {
   return dom.querySelector("#" + id)?.attributes?.src?.value;
 }
 
+function normalizeSlash(url) {
+  return url.replaceAll(/(?<!:)\/{2,}/g, "/");
+}
+
 function getFaviconUrl(dom, url) {
   let iconHref =
     dom.querySelector("link[rel='icon']")?.attributes?.href?.value ??
     dom.querySelector("link[rel='shortcut icon']")?.attributes?.href?.value;
   if (!iconHref) {
-    return new URL(url).origin + "/favicon.ico";
+    return normalizeSlash(new URL(url).origin + "/favicon.ico");
   }
 
   if (iconHref.includes("http")) {
     return iconHref;
   }
   if (iconHref.startsWith("//")) {
-    return new URL(url).protocol + iconHref;
+    return normalizeSlash(new URL(url).protocol + iconHref);
   }
+
   iconHref = iconHref.replace(/\.+\//, "/");
+  if (iconHref.startsWith("/")) {
+    return normalizeSlash(`${new URL(url).origin}/${iconHref}`);
+  }
 
   const baseUrl = dom.querySelector("base")?.attributes?.href?.value;
   if (baseUrl === "/") {
-    return new URL(url).origin + "/" + iconHref;
+    return normalizeSlash(new URL(url).origin + "/" + iconHref);
   }
   if (baseUrl) {
-    return baseUrl + iconHref;
+    return normalizeSlash(baseUrl + iconHref);
   }
 
-  return new URL(url).origin + iconHref;
+  return normalizeSlash(`${new URL(url).origin}/${iconHref}`);
 }
 
 function getImageUrl(dom, url) {
-  const imageUrl =
-    getMetaByProperty(dom, "og:image") ?? getSrcById(dom, "ebooksImgBlkFront");
-
-  return imageUrl;
+  return (
+    getMetaByProperty(dom, "og:image") ?? getSrcById(dom, "ebooksImgBlkFront")
+  );
 }
 
 function isSecure(url) {
@@ -107,3 +114,6 @@ async function createCard(url, descMaxLen) {
 }
 
 module.exports = createCard;
+
+// For test
+module.exports.getFaviconUrl = getFaviconUrl;
