@@ -27,39 +27,18 @@ function getSrcById(dom, id) {
   return dom.querySelector("#" + id)?.attributes?.src?.value;
 }
 
-function normalizeSlash(url) {
-  return url.replaceAll(/(?<!:)\/{2,}/g, "/");
-}
-
 function getFaviconUrl(dom, url) {
   let iconHref =
     dom.querySelector("link[rel='icon']")?.attributes?.href?.value ??
     dom.querySelector("link[rel='shortcut icon']")?.attributes?.href?.value;
   if (!iconHref) {
-    return normalizeSlash(new URL(url).origin + "/favicon.ico");
-  }
-
-  if (iconHref.includes("http")) {
-    return iconHref;
-  }
-  if (iconHref.startsWith("//")) {
-    return normalizeSlash(new URL(url).protocol + iconHref);
-  }
-
-  iconHref = iconHref.replace(/\.+\//, "/");
-  if (iconHref.startsWith("/")) {
-    return normalizeSlash(`${new URL(url).origin}/${iconHref}`);
+    return new URL("favicon.ico", url).toString();
   }
 
   const baseUrl = dom.querySelector("base")?.attributes?.href?.value;
-  if (baseUrl === "/") {
-    return normalizeSlash(new URL(url).origin + "/" + iconHref);
-  }
-  if (baseUrl) {
-    return normalizeSlash(baseUrl + iconHref);
-  }
-
-  return normalizeSlash(`${new URL(url).origin}/${iconHref}`);
+  return baseUrl
+    ? new URL(iconHref, new URL(baseUrl, url).toString()).toString()
+    : new URL(iconHref, url).toString();
 }
 
 function getImageUrl(dom, url) {
