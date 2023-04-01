@@ -1,5 +1,8 @@
 {
   "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
   "devDependencies": {
     "jest": "^29.4.3",
     "jsdom": "^21.1.0",

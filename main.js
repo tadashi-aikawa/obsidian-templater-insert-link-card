@@ -32,7 +32,7 @@ function getFaviconUrl(dom, url) {
     dom.querySelector("link[rel='icon']")?.attributes?.href?.value ??
     dom.querySelector("link[rel='shortcut icon']")?.attributes?.href?.value;
   if (!iconHref) {
-    return new URL("favicon.ico", url).toString();
+    return new URL("/favicon.ico", url).toString();
   }
 
   const baseUrl = dom.querySelector("base")?.attributes?.href?.value;
@@ -41,7 +41,7 @@ function getFaviconUrl(dom, url) {
     : new URL(iconHref, url).toString();
 }
 
-function getImageUrl(dom, url) {
+function getImageUrl(dom) {
   return (
     getMetaByProperty(dom, "og:image") ?? getSrcById(dom, "ebooksImgBlkFront")
   );
@@ -66,7 +66,7 @@ async function createCard(url, descMaxLen) {
     getMetaByName(html, "description") ??
     "";
   const faviconUrl = getFaviconUrl(html, url);
-  const imageUrl = getImageUrl(html, url);
+  const imageUrl = getImageUrl(html);
 
   const imageDom = isSecure(imageUrl)
     ? `<img src="${imageUrl}" class="link-card-image"/>`
