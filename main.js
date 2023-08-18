@@ -41,10 +41,10 @@ function getFaviconUrl(dom, url) {
     : new URL(iconHref, url).toString();
 }
 
-function getImageUrl(dom) {
-  return (
-    getMetaByProperty(dom, "og:image") ?? getSrcById(dom, "ebooksImgBlkFront")
-  );
+function getCoverUrl(dom, url) {
+  const coverHref =
+    getMetaByProperty(dom, "og:image") ?? getSrcById(dom, "ebooksImgBlkFront");
+  return coverHref ? new URL(coverHref, url).toString() : undefined;
 }
 
 function isSecure(url) {
@@ -66,7 +66,7 @@ async function createCard(url, descMaxLen) {
     getMetaByName(html, "description") ??
     "";
   const faviconUrl = getFaviconUrl(html, url);
-  const imageUrl = getImageUrl(html);
+  const imageUrl = getCoverUrl(html, url);
 
   const imageDom = isSecure(imageUrl)
     ? `<img src="${imageUrl}" class="link-card-image"/>`
@@ -96,3 +96,4 @@ module.exports = createCard;
 
 // For test
 module.exports.getFaviconUrl = getFaviconUrl;
+module.exports.getCoverUrl = getCoverUrl;
