@@ -28,9 +28,13 @@ function getSrcById(dom, id) {
 }
 
 function getFaviconUrl(dom, url) {
+  const toIconHref = (selector) =>
+    dom.querySelector(selector)?.attributes.getNamedItem("href")?.value;
+
   let iconHref =
-    dom.querySelector("link[rel='icon']")?.attributes?.href?.value ??
-    dom.querySelector("link[rel='shortcut icon']")?.attributes?.href?.value;
+    toIconHref("link[rel~='icon'][href$='.svg']") ??
+    toIconHref("link[rel~='icon'][href$='.png']") ??
+    toIconHref("link[rel~='icon'][href$='.ico']");
   if (!iconHref) {
     return new URL("/favicon.ico", url).toString();
   }
