@@ -34,7 +34,8 @@ function getFaviconUrl(dom, url) {
   let iconHref =
     toIconHref("link[rel~='icon'][href$='.svg']") ??
     toIconHref("link[rel~='icon'][href$='.png']") ??
-    toIconHref("link[rel~='icon'][href$='.ico']");
+    toIconHref("link[rel~='icon'][href$='.ico']") ??
+    toIconHref("link[rel~='icon']");
   if (!iconHref) {
     return new URL("/favicon.ico", url).toString();
   }
